@@ -23,7 +23,7 @@ function toggleMode() {
             <img src="/icon.png" class="w-8" alt="Logo" />
             <h1 class="text-lg text-primary font-bold">Postman Clone</h1>
         </a>
-        <button @click="toggleMode" class="hover:bg-default-300/50 rounded-md p-2 transition-colors">
+        <button title="Toggle Theme" @click="toggleMode" class="hover:bg-default-300/50 rounded-md p-2 transition-colors">
             <SunIcon v-if="isDarkMode" class="size-6 text-foreground dark:text-background" />
             <MoonIcon v-if="!isDarkMode" class="size-6 text-foreground dark:text-background" />
         </button>
