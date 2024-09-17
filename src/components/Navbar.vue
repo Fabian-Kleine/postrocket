@@ -2,13 +2,20 @@
 import { ref, Ref } from 'vue'
 import { SunIcon, MoonIcon } from '@heroicons/vue/24/outline'
 
-const isDarkMode:Ref<boolean, boolean> = ref(false);
+const body = document.querySelector('body');
+
+const defaultIsDarkMode:boolean = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
+
+if (defaultIsDarkMode && body) {
+    body.className = "dark";
+}
+
+const isDarkMode:Ref<boolean, boolean> = ref(defaultIsDarkMode);
 
 function toggleMode() {
     isDarkMode.value = !isDarkMode.value;
-    const body = document.querySelector('body');
-    console.log(body);
-    if (!body?.className) return;
+    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode.value));
+    if (!body) return;
     if (isDarkMode.value) {
         body.className = "dark";
     } else {
