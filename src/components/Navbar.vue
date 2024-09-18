@@ -26,11 +26,11 @@ function toggleMode() {
 
 <template>
     <nav class="flex justify-between items-center w-screen border-b border-b-default-200 dark:border-b-default-700 p-2">
-        <a href="/" class="flex justify-start gap-2 p-2 transition-colors hover:bg-default-300/50 rounded-md w-fit">
+        <a href="/" class="flex justify-start gap-2 p-2 transition-colors hover:bg-default-300/50 dark:hover:bg-default-600 rounded-md w-fit">
             <img src="/icon.png" class="w-8" alt="Logo" />
             <h1 class="text-lg text-primary font-bold">Postman Clone</h1>
         </a>
-        <button title="Toggle Theme" @click="toggleMode" class="hover:bg-default-300/50 rounded-md p-2 transition-colors">
+        <button title="Toggle Theme" @click="toggleMode" class="hover:bg-default-300/50 dark:hover:bg-default-600 rounded-md p-2 transition-colors">
             <SunIcon v-if="isDarkMode" class="size-6 text-foreground dark:text-background" />
             <MoonIcon v-if="!isDarkMode" class="size-6 text-foreground dark:text-background" />
         </button>
