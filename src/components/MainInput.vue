@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, Ref } from 'vue';
-
-type Tab = {
-    url: string,
-    method: string
-}[];
+import { Tab } from '../types';
 
 interface Props {
-    tabs: Tab,
+    tabs: Tab[],
     activeTab: number
 }
 
