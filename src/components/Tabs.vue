@@ -79,7 +79,7 @@ onMounted(() => {
                 <XMarkIcon class="text-foreground dark:text-default size-5" />
             </button>
         </div>
-        <div @click="tabs.push({ method: 'GET', url: '' }); activeTab = tabs.length-1;" class="flex justify-left items-center gap-2 ml-2 h-fit p-2 rounded-md text-sm cursor-pointer border-default-200 dark:border-default-700 hover:bg-default-300/50 dark:hover:bg-default-600">
+        <div @click="tabs.push({ method: 'GET', url: '' }); activeTab = tabs.length-1;" class="flex justify-left items-center gap-2 ml-2 h-fit p-2 rounded-md text-sm cursor-pointer transition-colors border-default-200 dark:border-default-700 hover:bg-default-300/50 dark:hover:bg-default-600">
             <PlusIcon class="text-foreground dark:text-default size-5" />
         </div>
     </div>
