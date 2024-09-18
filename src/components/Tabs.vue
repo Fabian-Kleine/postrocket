@@ -6,9 +6,15 @@ import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
 import MainInput from './MainInput.vue';
 
+type bodyTypeType = "none" | "form-data" | "x-www-form-urlencoded" | "JSON" | "XML";
+
 type Tab = {
     url: string,
-    method: string
+    method: string,
+    body?: {
+        type: bodyTypeType,
+        content?: string | Array<Object>,
+    }
 }
 
 type Tabs = Ref<Tab[], Tab[]>;
@@ -16,6 +22,13 @@ type Tabs = Ref<Tab[], Tab[]>;
 const tabs: Tabs = ref([]);
 
 const activeTab: Ref<number, number> = ref(0);
+
+const activeBodyType: Ref<string, string> = ref("none");
+
+const setBodyType = (bodyType: bodyTypeType) => {
+    activeBodyType.value = bodyType;
+    tabs.value[activeTab.value] = {...tabs.value[activeTab.value], body: { type: bodyType }};
+}
 
 function closeTab(i: number) {
     tabs.value.splice(i, 1);
@@ -29,6 +42,7 @@ function closeTab(i: number) {
 
 function openTab(i: number) {
     activeTab.value = i;
+    activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
 }
 
 watch(tabs, () => {
@@ -99,23 +113,23 @@ onMounted(() => {
         </div>
         <h2 class="my-4 font-bold text-lg">Body</h2>
         <Label for="none-radio">
-            <Radio checked variant="primary" name="body-format" id="none-radio" value="none" />
+            <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary" name="body-format" id="none-radio" />
             none
         </Label>
         <Label for="form-data-radio">
-            <Radio variant="primary" name="body-format" id="form-data-radio" value="form-data" />
+            <Radio :checked="activeBodyType == 'form-data'" @input="setBodyType('form-data')" variant="primary" name="body-format" id="form-data-radio" />
             form-data
         </Label>
         <Label for="x-www-form-urlencoded-radio">
-            <Radio variant="primary" name="body-format" id="x-www-form-urlencoded-radio" value="x-www-form-urlencoded" />
+            <Radio :checked="activeBodyType == 'x-www-form-urlencoded'" @input="setBodyType('x-www-form-urlencoded')" variant="primary" name="body-format" id="x-www-form-urlencoded-radio" />
             x-www-form-urlencoded
         </Label>
         <Label for="JSON-radio">
-            <Radio variant="primary" name="body-format" id="JSON-radio" value="JSON" />
+            <Radio :checked="activeBodyType == 'JSON'" @input="setBodyType('JSON')" variant="primary" name="body-format" id="JSON-radio" />
             JSON
         </Label>
         <Label for="XML-radio">
-            <Radio variant="primary" name="body-format" id="XML-radio" value="XML" />
+            <Radio :checked="activeBodyType == 'XML'" @input="setBodyType('XML')" variant="primary" name="body-format" id="XML-radio" />
             XML
         </Label>
     </div>
