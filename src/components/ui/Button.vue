@@ -5,7 +5,7 @@ interface Props {
 
 const { variant } = defineProps<Props>();
 const className = [
-    "text-background transition-colors font-bold rounded px-3 text-sm",
+    "text-background transition-colors font-bold rounded px-4 text-sm",
     variant == "primary" ? "bg-primary hover:bg-primary-600"
         : variant == "secondary" ? "bg-secondary hover:bg-secondary-600"
             : variant == "default" ? "bg-default-600 hover:bg-default-700"
