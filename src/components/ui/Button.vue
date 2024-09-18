@@ -5,13 +5,13 @@ interface Props {
 
 const { variant } = defineProps<Props>();
 const className = [
-    "text-background transition-colors font-bold rounded px-4 text-sm",
-    variant == "primary" ? "bg-primary hover:bg-primary-600"
-        : variant == "secondary" ? "bg-secondary hover:bg-secondary-600"
-            : variant == "default" ? "bg-default-600 hover:bg-default-700"
-                : variant == "danger" ? "bg-danger hover:bg-danger-600"
-                    : variant == "success" ? "bg-success hover:bg-success-600"
-                        : variant == "warning" ? "bg-warning hover:bg-warning-600" : ""];
+    "text-background transition-colors font-bold rounded px-4 text-sm focus:ring rounded-s-sm ring-offset-2 ring-offset-background dark:ring-offset-foreground",
+    variant == "primary" ? "bg-primary hover:bg-primary-600 ring-primary"
+        : variant == "secondary" ? "bg-secondary hover:bg-secondary-600 ring-secondary"
+            : variant == "default" ? "bg-default-600 hover:bg-default-700 ring-default"
+                : variant == "danger" ? "bg-danger hover:bg-danger-600 ring-danger"
+                    : variant == "success" ? "bg-success hover:bg-success-600 ring-success"
+                        : variant == "warning" ? "bg-warning hover:bg-warning-600 ring-warning" : ""];
 </script>
 
 <template>
