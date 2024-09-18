@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 import { Ref, ref } from 'vue';
-import Button from './Button.vue';
+import Button from './ui/Button.vue';
 import MainInput from './MainInput.vue';
 
 const tabs = ref([
