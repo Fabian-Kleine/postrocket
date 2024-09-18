@@ -90,7 +90,7 @@ onMounted(() => {
         </div>
         <div class="flex gap-2 w-full">
             <MainInput :tabs="tabs" :active-tab="activeTab" />
-            <Button children="Senden" />
+            <Button variant="primary">Senden</Button>
         </div>
     </div>
 </template>
