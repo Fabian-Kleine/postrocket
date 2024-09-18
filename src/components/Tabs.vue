@@ -5,19 +5,7 @@ import Button from './ui/Button.vue';
 import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
 import MainInput from './MainInput.vue';
-
-type bodyTypeType = "none" | "form-data" | "x-www-form-urlencoded" | "JSON" | "XML";
-
-type Tab = {
-    url: string,
-    method: string,
-    body?: {
-        type: bodyTypeType,
-        content?: string | Array<Object>,
-    }
-}
-
-type Tabs = Ref<Tab[], Tab[]>;
+import { Tabs, bodyTypeType } from "../types";
 
 const tabs: Tabs = ref([]);
 

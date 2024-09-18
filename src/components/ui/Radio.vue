@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { variantsType } from '../../types';
+
 interface Props {
-    variant: "primary" | "secondary" | "default" | "warning" | "success" | "danger";
+    variant: variantsType;
 }
 
 const { variant } = defineProps<Props>();
