@@ -48,6 +48,7 @@ onMounted(() => {
 
         if (parsedSavedTabs) {
             tabs.value = parsedSavedTabs;
+            activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
         }
     }
 
