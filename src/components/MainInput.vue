@@ -42,12 +42,12 @@ onBeforeUnmount(() => {
             :value="tabs[activeTab].method" />
         <div v-if="selectOpen" @click.stop ref="methodsSelect"
             class="absolute top-12 left-0 min-w-32 p-2 bg-default-100 dark:bg-default-800 rounded-md shadow-lg">
-            <div @click="tabs[activeTab].method = 'POST'; selectOpen = false;"
-                class="text-warning font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md">
-                POST</div>
             <div @click="tabs[activeTab].method = 'GET'; selectOpen = false;"
                 class="text-success font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md">
                 GET</div>
+            <div @click="tabs[activeTab].method = 'POST'; selectOpen = false;"
+                class="text-warning font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md">
+                POST</div>
         </div>
         <div class="w-[1px] mx-4 h-full bg-default-200 dark:bg-default-700"></div>
         <input type="text" v-model="tabs[activeTab].url"
