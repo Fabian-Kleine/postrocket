@@ -42,6 +42,15 @@ watch(activeTab, () => {
 }, { deep: true });
 
 onMounted(() => {
+    if ("activeTab" in localStorage) {
+        const savedActiveTab = localStorage.getItem('activeTab');
+        const parsedSavedActiveTab = JSON.parse(savedActiveTab || "0");
+
+        if (parsedSavedActiveTab) {
+            activeTab.value = parsedSavedActiveTab;
+        }
+    }
+
     if ("tabs" in localStorage) {
         const savedTabs = localStorage.getItem('tabs');
         const parsedSavedTabs = JSON.parse(savedTabs || "");
@@ -49,15 +58,6 @@ onMounted(() => {
         if (parsedSavedTabs) {
             tabs.value = parsedSavedTabs;
             activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
-        }
-    }
-
-    if ("activeTab" in localStorage) {
-        const savedActiveTab = localStorage.getItem('activeTab');
-        const parsedSavedActiveTab = JSON.parse(savedActiveTab || "0");
-
-        if (parsedSavedActiveTab) {
-            activeTab.value = parsedSavedActiveTab;
         }
     }
 })
