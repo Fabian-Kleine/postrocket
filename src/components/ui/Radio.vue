@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { variantsType } from '../../types';
+import { cn } from '../../lib/utils';
 
 interface Props {
     variant: variantsType;
@@ -17,5 +18,5 @@ const className = [
 </script>
 
 <template>
-    <input type="radio" :class="className">
+    <input type="radio" :class="cn(className)">
 </template>

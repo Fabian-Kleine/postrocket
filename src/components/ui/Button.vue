@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { variantsType } from '../../types';
+import { cn } from '../../lib/utils';
 
 interface Props {
     variant: variantsType;
@@ -17,7 +18,7 @@ const className = [
 </script>
 
 <template>
-    <button type="button" :class="className">
+    <button type="button" :class="cn(className)">
         <slot></slot>
     </button>
 </template>
