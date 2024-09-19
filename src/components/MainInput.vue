@@ -19,7 +19,7 @@ const selectClose = () => {
 function handleMethodInput(e: Event) {
     const target = (<HTMLInputElement>e.target);
 
-    tabs[activeTab].method = target.value;
+    tabs[activeTab].method = target.value.toUpperCase();
     selectOpen.value = false;
 }
 
@@ -34,7 +34,7 @@ onBeforeUnmount(() => {
 
 <template>
     <div class="relative flex border border-default-200 dark:border-default-700 p-2 rounded-md flex-grow">
-        <input @focus="selectOpen = !selectOpen" @click.stop @input="handleMethodInput"
+        <input @focus="selectOpen = true" @click.stop @input="handleMethodInput"
             :class="['bg-background dark:bg-foreground font-bold w-24 outline-none focus:ring ring-offset-8 rounded-s-sm ring-primary ring-offset-background dark:ring-offset-foreground', methodColors(tabs[activeTab].method)]"
             :value="tabs[activeTab].method" />
         <div v-if="selectOpen" @click.stop ref="methodsSelect"
