@@ -2,12 +2,23 @@ import { Ref } from "vue";
 
 export type bodyTypeType = "none" | "form-data" | "x-www-form-urlencoded" | "JSON" | "XML";
 
+export type FormDataType = {
+    active: boolean | null,
+    key: string,
+    value: string
+}
+
 export type Tab = {
     url: string,
     method: string,
-    body?: {
+    body: {
         type: bodyTypeType,
-        content?: string | Array<Object>,
+        content: {
+            formData: Array<FormDataType>,
+            xWWWFormData: Array<FormDataType>,
+            JSON: string | undefined,
+            XML: string | undefined
+        },
     }
 }
 
