@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { XMarkIcon, PlusIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { XMarkIcon, PlusIcon } from '@heroicons/vue/24/outline'
 import { onMounted, Ref, ref, watch } from 'vue';
 import Button from './ui/Button.vue';
 import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
+import DynamicTable from './ui/DynamicTable.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
 
@@ -62,31 +63,6 @@ function updateBodyContent(e: Event) {
         tabs.value[activeTab.value].body.content.XML = target.value;
     }
 }
-
-function addRowIfNeeded(index: number) {
-    if (activeBodyType.value == "x-www-form-urlencoded") {
-        if (index === tabs.value[activeTab.value].body.content.xWWWFormData.length - 1 && (tabs.value[activeTab.value].body.content.xWWWFormData[index].key != "" || tabs.value[activeTab.value].body.content.xWWWFormData[index].value != "")) {
-            tabs.value[activeTab.value].body.content.xWWWFormData[index].active = true;
-            tabs.value[activeTab.value].body.content.xWWWFormData.push({ active: null, key: '', value: '' });
-        }
-    }
-    if (activeBodyType.value == "form-data") {
-        if (index === tabs.value[activeTab.value].body.content.formData.length - 1 && (tabs.value[activeTab.value].body.content.formData[index].key != "" || tabs.value[activeTab.value].body.content.formData[index].value != "")) {
-            tabs.value[activeTab.value].body.content.formData[index].active = true;
-            tabs.value[activeTab.value].body.content.formData.push({ active: null, key: '', value: '' });
-        }
-    }
-}
-
-function rmRow(index: number) {
-    if (activeBodyType.value == "form-data") {
-        tabs.value[activeTab.value].body.content.formData.splice(index, 1);
-    }
-
-    if (activeBodyType.value == "x-www-form-urlencoded") {
-        tabs.value[activeTab.value].body.content.xWWWFormData.splice(index, 1);
-    }
- }
 
 watch(tabs, () => {
     localStorage.setItem('tabs', JSON.stringify(tabs.value));
@@ -185,63 +161,9 @@ onMounted(() => {
             class="block w-full overflow-visible mt-4 bg-background dark:bg-foreground border border-default-200 dark:border-default-700 rounded-md outline-none p-2">{{ tabs[activeTab].body?.content && activeBodyType == 'JSON' ? tabs[activeTab].body?.content?.JSON : "" }}</textarea>
         <textarea @input="updateBodyContent" v-if="activeBodyType == 'XML'" rows="10"
             class="block w-full overflow-visible mt-4 bg-background dark:bg-foreground border border-default-200 dark:border-default-700 rounded-md outline-none p-2">{{ tabs[activeTab].body?.content && activeBodyType == "XML" ? tabs[activeTab].body?.content?.XML : "" }}</textarea>
-        <table class="w-full text-left" v-if="activeBodyType == 'x-www-form-urlencoded'">
-            <thead>
-                <tr class="border-t border-b border-default-200 dark:border-default-700 text-default-600 dark:text-default">
-                    <th class="w-8 border border-default-200 dark:border-default-700 p-2 font-normal"></th>
-                    <th class="border border-default-200 dark:border-default-700 p-2 font-normal">Key</th>
-                    <th class="border border-default-200 dark:border-default-700 p-2 font-normal">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(data, index) in tabs[activeTab].body.content.xWWWFormData"
-                    class="border-t border-b border-default-200 dark:border-default-700 group relative" :key="index">
-                    <td class="border border-default-200 dark:border-default-700 p-2">
-                        <input type="checkbox" class="accent-primary" v-if="data.active != null" v-model="data.active">
-                    </td>
-                    <td class="border border-default-200 dark:border-default-700 p-2"><input type="text"
-                            class="bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700"
-                            v-model="data.key" placeholder="Key" @input="addRowIfNeeded(index)">
-                    </td>
-                    <td class="border border-default-200 dark:border-default-700 p-2"><input type="text"
-                            class="bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700"
-                            v-model="data.value" placeholder="Value" @input="addRowIfNeeded(index)">
-                    </td>
-                    <button title="Eintrag löschen" v-if="data.active != null" @click="rmRow(index)"
-                        class="opacity-0 transition-all rounded absolute mt-1.5 right-1 p-1 group-hover:opacity-100 bg-background dark:bg-foreground hover:bg-default-200 dark:hover:bg-default-700">
-                        <TrashIcon class="text-foreground dark:text-default size-5" />
-                    </button>
-                </tr>
-            </tbody>
-        </table>
-        <table class="w-full text-left" v-if="activeBodyType == 'form-data'">
-            <thead>
-                <tr class="border-t border-b border-default-200 dark:border-default-700 text-default-600 dark:text-default">
-                    <th class="w-8 border border-default-200 dark:border-default-700 p-2 font-normal"></th>
-                    <th class="border border-default-200 dark:border-default-700 p-2 font-normal">Key</th>
-                    <th class="border border-default-200 dark:border-default-700 p-2 font-normal">Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(data, index) in tabs[activeTab].body.content.formData"
-                    class="border-t border-b border-default-200 dark:border-default-700 relative group" :key="index">
-                    <td class="border border-default-200 dark:border-default-700 p-2">
-                        <input type="checkbox" class="accent-primary" v-if="data.active != null" v-model="data.active">
-                    </td>
-                    <td class="border border-default-200 dark:border-default-700 p-2"><input type="text"
-                            class="bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700"
-                            v-model="data.key" placeholder="Key" @input="addRowIfNeeded(index)">
-                    </td>
-                    <td class="border border-default-200 dark:border-default-700 p-2"><input type="text"
-                            class="bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700"
-                            v-model="data.value" placeholder="Value" @input="addRowIfNeeded(index)">
-                    </td>
-                    <button title="Eintrag löschen" v-if="data.active != null" @click="rmRow(index)"
-                        class="opacity-0 transition-all rounded absolute mt-1.5 right-1 p-1 group-hover:opacity-100 bg-background dark:bg-foreground hover:bg-default-200 dark:hover:bg-default-700">
-                        <TrashIcon class="text-foreground dark:text-default size-5" />
-                    </button>
-                </tr>
-            </tbody>
-        </table>
+        <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
+            :form-data="tabs[activeTab].body.content.xWWWFormData" :active-body-type="activeBodyType" />
+        <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData"
+            :active-body-type="activeBodyType" />
     </div>
 </template>
