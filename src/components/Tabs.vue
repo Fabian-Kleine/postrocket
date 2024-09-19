@@ -8,6 +8,7 @@ import DynamicTable from './ui/DynamicTable.vue';
 import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
+import methodColors from '../lib/methodColors';
 
 const tabs: Tabs = ref([]);
 
@@ -94,7 +95,7 @@ onMounted(() => {
                 :class="activeTab == index ? 'border-l border-r' : ''">
                 <div v-if="activeTab == index" class="absolute top-0 left-0 w-full bg-primary h-1"></div>
                 <span
-                    :class="['font-bold', tab.method == 'POST' ? 'text-warning' : '', tab.method == 'GET' ? 'text-success' : '']">{{
+                    :class="['font-bold', methodColors(tab.method)]">{{
                         tab.method }}</span>
                 <span
                     :class="['text-ellipsis', 'overflow-hidden', 'text-foreground', 'dark:text-default', activeTab != index ? 'italic' : '']">{{
