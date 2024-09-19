@@ -40,11 +40,11 @@ function rmRow(index: number) {
                     <input type="checkbox" class="accent-primary" v-if="data.active != null" v-model="data.active">
                 </td>
                 <td :class="cn('border border-default-200 dark:border-default-700 p-2')"><input type="text"
-                        :class="cn('bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700')"
+                        :class="cn('bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700', data.active == false ? 'text-default-400' : '' )"
                         v-model="data.key" placeholder="Key" @input="addRowIfNeeded(index)">
                 </td>
                 <td class="border border-default-200 dark:border-default-700 p-2"><input type="text"
-                        class="bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700"
+                        :class="cn('bg-background dark:bg-foreground w-full outline-none focus:bg-default-100 dark:focus:bg-default-800 border border-transparent focus:border-default-200 dark:focus:border-default-700', data.active == false ? 'text-default-400' : '')"
                         v-model="data.value" placeholder="Value" @input="addRowIfNeeded(index)">
                 </td>
                 <button title="Eintrag löschen" v-if="data.active != null" @click="rmRow(index)"
