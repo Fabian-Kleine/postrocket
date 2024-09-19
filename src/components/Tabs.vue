@@ -9,6 +9,7 @@ import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
 import methodColors from '../lib/methodColors';
+import { cn } from '../lib/utils';
 
 const tabs: Tabs = ref([]);
 
@@ -86,13 +87,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex justify-left items-center border-b border-default-200 dark:border-default-700">
-        <div class="flex justify-center items-center relative -bottom-[1px] group z-10"
-            :class="activeTab == index ? 'bg-background dark:bg-foreground' : ''" v-for="(tab, index) in tabs"
+    <div :class="cn('flex justify-left items-center border-b border-default-200 dark:border-default-700')">
+        <div :class="cn('flex justify-center items-center relative -bottom-[1px] group z-10', activeTab == index ? 'bg-background dark:bg-foreground' : '')"
+            v-for="(tab, index) in tabs"
             :title="tab.url || 'Unbenannter Request'" v-if="tabs.length > 0">
             <div @click="openTab(index)"
-                class="flex justify-left items-center gap-2 w-56 px-3 py-4 text-sm cursor-pointer border-default-200 dark:border-default-700"
-                :class="activeTab == index ? 'border-l border-r' : ''">
+                :class="cn('flex justify-left items-center gap-2 w-56 px-3 py-4 text-sm cursor-pointer border-default-200 dark:border-default-700', activeTab == index ? 'border-l border-r' : '')">
                 <div v-if="activeTab == index" class="absolute top-0 left-0 w-full bg-primary h-1"></div>
                 <span
                     :class="['font-bold', methodColors(tab.method)]">{{
@@ -102,19 +102,19 @@ onMounted(() => {
                         tab.url || 'Unbenannter Request' }}</span>
             </div>
             <button @click="closeTab(index)"
-                class="opacity-0 transition-all absolute right-1 p-1 group-hover:opacity-100 bg-background dark:bg-foreground hover:bg-default-200 dark:hover:bg-default-700">
+                :class="cn('opacity-0 transition-all absolute right-1 p-1 group-hover:opacity-100 bg-background dark:bg-foreground hover:bg-default-200 dark:hover:bg-default-700')">
                 <XMarkIcon class="text-foreground dark:text-default size-5" />
             </button>
         </div>
         <div @click="addTab"
-            class="flex justify-left items-center gap-2 ml-2 h-fit p-2 rounded-md text-sm cursor-pointer transition-colors border-default-200 dark:border-default-700 hover:bg-default-300/50 dark:hover:bg-default-600">
+            :class="cn('flex justify-left items-center gap-2 ml-2 h-fit p-2 rounded-md text-sm cursor-pointer transition-colors border-default-200 dark:border-default-700 hover:bg-default-300/50 dark:hover:bg-default-600')">
             <PlusIcon class="text-foreground dark:text-default size-5" />
         </div>
     </div>
     <div class="max-w-4xl mt-12 mx-4" v-if="tabs.length > 0">
         <div class="flex justify-start items-center gap-2">
             <div
-                class="text-primary-400 uppercase font-bold p-1 text-sm border border-default-200 dark:border-default-700 rounded-md">
+                :class="cn('text-primary-400 uppercase font-bold p-1 text-sm border border-default-200 dark:border-default-700 rounded-md')">
                 http</div>
             <h2 class="my-4 cursor-default">{{ tabs[activeTab].url || "Unbenannter Request" }}</h2>
         </div>
