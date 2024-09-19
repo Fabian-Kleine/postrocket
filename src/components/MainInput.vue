@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, Ref } from 'vue';
 import { Tab } from '../types';
-import methodColors from '../lib/methodColors';
-import { cn } from '../lib/utils';
+import { cn, methodColors } from '../lib/utils';
 
 interface Props {
     tabs: Tab[];

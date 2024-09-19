@@ -8,8 +8,7 @@ import DynamicTable from './ui/DynamicTable.vue';
 import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
-import methodColors from '../lib/methodColors';
-import { cn } from '../lib/utils';
+import { cn, methodColors } from '../lib/utils';
 
 const tabs: Tabs = ref([]);
 
