@@ -5,6 +5,7 @@ import Button from './ui/Button.vue';
 import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
 import DynamicTable from './ui/DynamicTable.vue';
+import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
 
@@ -51,17 +52,6 @@ function addTab() {
         }
     });
     activeTab.value = tabs.value.length - 1;
-}
-
-function updateBodyContent(e: Event) {
-    const target = <HTMLTextAreaElement>e.target;
-
-    if (activeBodyType.value == "JSON") {
-        tabs.value[activeTab.value].body.content.JSON = target.value;
-    }
-    if (activeBodyType.value == "XML") {
-        tabs.value[activeTab.value].body.content.XML = target.value;
-    }
 }
 
 watch(tabs, () => {
@@ -157,10 +147,7 @@ onMounted(() => {
                 id="XML-radio" />
             XML
         </Label>
-        <textarea @input="updateBodyContent" v-if="activeBodyType == 'JSON'" rows="10"
-            class="block w-full overflow-visible mt-4 bg-background dark:bg-foreground border border-default-200 dark:border-default-700 rounded-md outline-none p-2">{{ tabs[activeTab].body?.content && activeBodyType == 'JSON' ? tabs[activeTab].body?.content?.JSON : "" }}</textarea>
-        <textarea @input="updateBodyContent" v-if="activeBodyType == 'XML'" rows="10"
-            class="block w-full overflow-visible mt-4 bg-background dark:bg-foreground border border-default-200 dark:border-default-700 rounded-md outline-none p-2">{{ tabs[activeTab].body?.content && activeBodyType == "XML" ? tabs[activeTab].body?.content?.XML : "" }}</textarea>
+        <BodyTextareas :active-body-type="activeBodyType" :content="tabs[activeTab].body.content" />
         <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
             :form-data="tabs[activeTab].body.content.xWWWFormData" :active-body-type="activeBodyType" />
         <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData"
