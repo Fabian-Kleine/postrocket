@@ -3,8 +3,8 @@ import { onBeforeUnmount, onMounted, ref, Ref } from 'vue';
 import { Tab } from '../types';
 
 interface Props {
-    tabs: Tab[],
-    activeTab: number
+    tabs: Tab[];
+    activeTab: number;
 }
 
 const { tabs, activeTab } = defineProps<Props>();
