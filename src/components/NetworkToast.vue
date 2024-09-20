@@ -5,7 +5,9 @@ import { useToast } from 'vue-toastification';
 const toast = useToast();
 
 useNetworkStatus((status) => {
-    if (status != "online") {
+    if (status == "online") {
+        toast.success("Du bist wieder online!")
+    } else {
         toast.error("Du bist offline!");
     }
 })
