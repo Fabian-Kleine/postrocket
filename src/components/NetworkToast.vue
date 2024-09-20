@@ -12,3 +12,5 @@ useNetworkStatus((status) => {
     }
 })
 </script>
+
+<template></template>
