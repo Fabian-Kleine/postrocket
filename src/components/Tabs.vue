@@ -9,10 +9,12 @@ import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
 import { cn, methodColors } from '../lib/utils';
+import { useStorage } from '../lib/hooks';
 
 const tabs: Tabs = ref([]);
+const [tabsStorage, setTabsStorage] = useStorage("tabs", "local");
 
-const activeTab: Ref<number, number> = ref(0);
+const [activeTab, setActiveTab] = useStorage("activeTab", "local");
 
 const activeBodyType: Ref<bodyTypeType, bodyTypeType> = ref("none");
 
@@ -20,21 +22,21 @@ const setBodyType = (bodyType: bodyTypeType) => {
     activeBodyType.value = bodyType;
     const newTab = { ...tabs.value[activeTab.value], body: { content: tabs.value[activeTab.value].body.content, type: bodyType } };
     tabs.value[activeTab.value] = newTab;
-    localStorage.setItem('tabs', JSON.stringify(newTab));
+    setTabsStorage(newTab);
 }
 
 function closeTab(i: number) {
     tabs.value.splice(i, 1);
     tabs.value = [...tabs.value];
     if (activeTab.value >= tabs.value.length) {
-        activeTab.value = tabs.value.length - 1;
+        setActiveTab(tabs.value.length - 1);
     } else if (activeTab.value == i) {
-        activeTab.value = i > 0 ? i - 1 : 0;
+        setActiveTab(i > 0 ? i - 1 : 0);
     }
 }
 
 function openTab(i: number) {
-    activeTab.value = i;
+    setActiveTab(i);
     activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
 }
 
@@ -52,51 +54,31 @@ function addTab() {
             }
         }
     });
-    activeTab.value = tabs.value.length - 1;
+    setActiveTab(tabs.value.length - 1);
     activeBodyType.value = 'none';
 }
 
-watch(tabs, () => {
-    localStorage.setItem('tabs', JSON.stringify(tabs.value));
-}, { deep: true });
-
-watch(activeTab, () => {
-    localStorage.setItem('activeTab', JSON.stringify(activeTab.value));
-}, { deep: true });
+watch(tabs, () => {setTabsStorage(tabs.value)}, { deep: true });
 
 onMounted(() => {
-    if ("activeTab" in localStorage) {
-        const savedActiveTab = localStorage.getItem('activeTab');
-        const parsedSavedActiveTab = JSON.parse(savedActiveTab || "0");
-
-        if (parsedSavedActiveTab) {
-            activeTab.value = parsedSavedActiveTab;
-        }
-    }
-
     if ("tabs" in localStorage) {
-        const savedTabs = localStorage.getItem('tabs');
-        const parsedSavedTabs = JSON.parse(savedTabs || "");
-
-        if (parsedSavedTabs) {
-            tabs.value = parsedSavedTabs;
-            activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
-        }
+        //@ts-ignore
+        tabs.value = tabsStorage.value;
+        activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
     }
-})
+});
+
 </script>
 
 <template>
     <div :class="cn('flex justify-left items-center border-b border-default-200 dark:border-default-700')">
         <div :class="cn('flex justify-center items-center relative -bottom-[1px] group z-10', activeTab == index ? 'bg-background dark:bg-foreground' : '')"
-            v-for="(tab, index) in tabs"
-            :title="tab.url || 'Unbenannter Request'" v-if="tabs.length > 0">
+            v-for="(tab, index) in tabs" :title="tab.url || 'Unbenannter Request'" v-if="tabs.length > 0">
             <div @click="openTab(index)"
                 :class="cn('flex justify-left items-center gap-2 w-56 px-3 py-4 text-sm cursor-pointer border-default-200 dark:border-default-700', activeTab == index ? 'border-l border-r' : '')">
                 <div v-if="activeTab == index" class="absolute top-0 left-0 w-full bg-primary h-1"></div>
-                <span
-                    :class="['font-bold', methodColors(tab.method)]">{{
-                        tab.method }}</span>
+                <span :class="['font-bold', methodColors(tab.method)]">{{
+                    tab.method }}</span>
                 <span
                     :class="['text-ellipsis', 'overflow-hidden', 'text-foreground', 'dark:text-default', activeTab != index ? 'italic' : '']">{{
                         tab.url || 'Unbenannter Request' }}</span>

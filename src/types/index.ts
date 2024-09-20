@@ -25,3 +25,7 @@ export type Tab = {
 export type Tabs = Ref<Tab[], Tab[]>;
 
 export type variantsType = "primary" | "secondary" | "default" | "warning" | "success" | "danger";
+
+export type storageType = "session" | "local";
+
+export type useStorageType = [Ref<any>, (newValue: any) => void];
