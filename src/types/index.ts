@@ -29,3 +29,5 @@ export type variantsType = "primary" | "secondary" | "default" | "warning" | "su
 export type storageType = "session" | "local";
 
 export type useStorageType = [Ref<any>, (newValue: any) => void];
+
+export type useNetworkStatusType = (callback: (status: "online" | "offline") => void) => void;
