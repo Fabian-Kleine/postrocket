@@ -1,0 +1,12 @@
+<script setup lang="ts">
+import { useNetworkStatus } from '../lib/hooks';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+
+useNetworkStatus((status) => {
+    if (status != "online") {
+        toast.error("Du bist offline!");
+    }
+})
+</script>
