@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted } from "vue";
-import { storageType, useNetworkStatusType, useStorageType } from "../types";
+import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType } from "../types";
 
 // useStorage hook for sessionStorage and localStorage access
 const getItem = (key: string, storage: Storage) => {
@@ -31,7 +31,7 @@ export const useStorage = (key: string, type: storageType = 'session'): useStora
         value.value = newValue;
         storage.setItem(key, JSON.stringify(newValue));
     }
-    
+
     return [
         value,
         setItem
@@ -39,7 +39,7 @@ export const useStorage = (key: string, type: storageType = 'session'): useStora
 }
 
 // useNetworkStatus returns if the client is offline or online
-export const useNetworkStatus: useNetworkStatusType = (callback = () => {}) => {
+export const useNetworkStatus: useNetworkStatusType = (callback = () => { }) => {
     const updateOnlineStatus = () => {
         const status = navigator.onLine ? 'online' : 'offline';
         callback(status);
@@ -53,5 +53,22 @@ export const useNetworkStatus: useNetworkStatusType = (callback = () => {}) => {
     onUnmounted(() => {
         window.removeEventListener('online', updateOnlineStatus);
         window.removeEventListener('offline', updateOnlineStatus);
+    });
+}
+
+// useOnClickOutside calls callback function when the client clicks outside the provided element
+export const useOnClickOutside: useOnClickOutsideType = (ref, callback = () => { }) => {
+    function handleClickOutside(event: Event) {
+        if (ref.value && !ref.value.contains(event.target)) {
+            callback()
+        }
+    }
+
+    onMounted(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+    })
+
+    onUnmounted(() => {
+        document.removeEventListener('mousedown', handleClickOutside);
     });
 }
