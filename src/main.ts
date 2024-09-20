@@ -18,7 +18,7 @@ const options: PluginOptions = {
     draggable: true,
     draggablePercent: 0.3,
     showCloseButtonOnHover: false,
-    hideProgressBar: true,
+    hideProgressBar: false,
     closeButton: "button",
     icon: true,
     rtl: false,
