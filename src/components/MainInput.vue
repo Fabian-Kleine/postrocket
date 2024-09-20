@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { Tab } from '../types';
 import { cn, methodColors } from '../lib/utils';
+import { useOnClickOutside } from '../lib/hooks';
 
 interface Props {
     tabs: Tab[];
@@ -12,9 +13,13 @@ const { tabs, activeTab } = defineProps<Props>();
 
 const selectOpen: Ref<boolean, boolean> = ref(false);
 
+const selectRef = ref(null);
+
 const selectClose = () => {
     selectOpen.value = false;
 }
+
+useOnClickOutside(selectRef, selectClose);
 
 function handleMethodInput(e: Event) {
     const target = (<HTMLInputElement>e.target);
@@ -22,14 +27,6 @@ function handleMethodInput(e: Event) {
     tabs[activeTab].method = target.value.toUpperCase();
     selectOpen.value = false;
 }
-
-onMounted(() => {
-    document.addEventListener('click', selectClose);
-});
-
-onBeforeUnmount(() => {
-    document.removeEventListener('click', selectClose);
-});
 </script>
 
 <template>
@@ -37,7 +34,7 @@ onBeforeUnmount(() => {
         <input @focus="selectOpen = true" @click.stop @input="handleMethodInput"
             :class="cn('bg-background dark:bg-foreground font-bold w-24 outline-none focus:ring ring-offset-8 rounded-s-sm ring-primary ring-offset-background dark:ring-offset-foreground', methodColors(tabs[activeTab].method))"
             :value="tabs[activeTab].method" />
-        <div v-if="selectOpen" @click.stop ref="methodsSelect"
+        <div v-if="selectOpen" @click.stop ref="selectRef"
             :class="cn('absolute top-12 left-0 min-w-32 p-2 bg-default-100 dark:bg-default-800 rounded-md shadow-lg')">
             <div @click="tabs[activeTab].method = 'GET'; selectOpen = false;"
                 :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('get'))">
