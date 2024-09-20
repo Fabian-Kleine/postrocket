@@ -1,21 +1,18 @@
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
 import { SunIcon, MoonIcon } from '@heroicons/vue/24/outline';
 import { cn } from '../lib/utils';
+import { useStorage } from '../lib/hooks';
 
 const body = document.querySelector('body');
 
-const defaultIsDarkMode:boolean = JSON.parse(localStorage.getItem('isDarkMode') || 'false');
+const [ isDarkMode, setIsDarkMode ] = useStorage("isDarkMode", "local");
 
-if (defaultIsDarkMode && body) {
+if (isDarkMode.value && body) {
     body.className = "dark";
 }
 
-const isDarkMode:Ref<boolean, boolean> = ref(defaultIsDarkMode);
-
 function toggleMode() {
-    isDarkMode.value = !isDarkMode.value;
-    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode.value));
+    setIsDarkMode(!isDarkMode.value);
     if (!body) return;
     if (isDarkMode.value) {
         body.className = "dark";
