@@ -53,6 +53,7 @@ function addTab() {
         }
     });
     activeTab.value = tabs.value.length - 1;
+    activeBodyType.value = 'none';
 }
 
 watch(tabs, () => {
