@@ -3,7 +3,7 @@ import { SunIcon, MoonIcon } from '@heroicons/vue/24/outline';
 import { cn } from '../lib/utils';
 import { useTheme } from '../lib/hooks';
 
-const [theme, toggleTheme] = useTheme();
+const {theme, toggleTheme} = useTheme();
 </script>
 
 <template>
