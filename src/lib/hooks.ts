@@ -87,41 +87,32 @@ export const useOnClickOutside: useOnClickOutsideType = (ref, callback = () => {
     });
 }
 
-export const useTheme: useThemeType = () => {
+export const useTheme = (): useThemeType => {
     const body = document.querySelector('body');
     const [isDarkMode, setIsDarkMode] = useStorage("isDarkMode", "local");
 
-    const theme = ref();
+    const theme = ref(isDarkMode.value ? 'dark' : 'light');
+
+    const applyTheme = () => {
+        if (!body) return;
+        theme.value = isDarkMode.value ? 'dark' : 'light';
+        body.className = theme.value;
+    }
 
     const toggleTheme = () => {
-        if (!body) return;
         setIsDarkMode(!isDarkMode.value);
-        theme.value = isDarkMode.value ? 'dark' : 'light';
-        if (isDarkMode.value) {
-            body.className = "dark";
-        } else {
-            body.className = "light";
-        }
     };
 
     onMounted(() => {
-        theme.value = isDarkMode.value ? 'dark' : 'light';
-        if (isDarkMode.value && body) {
-            body.className = "dark";
-        } else if (body) {
-            body.className = "light";
-        }
+        applyTheme();
     });
 
-    watch(isDarkMode, (newValue) => {
-        if (body) {
-            theme.value = isDarkMode.value ? 'dark' : 'light';
-            body.className = newValue ? "dark" : "light";
-        }
+    watch(isDarkMode, () => {
+        applyTheme();
     });
 
-    return [
+    return {
         theme,
         toggleTheme,
-    ];
+    };
 }
