@@ -33,3 +33,7 @@ export type useStorageType = [Ref<any>, (newValue: any) => void];
 export type useNetworkStatusType = (callback: (status: "online" | "offline") => void) => void;
 
 export type useOnClickOutsideType = (ref: Ref, callback: () => void) => void;
+
+export type themeType = "dark" | "light";
+
+export type useThemeType = () => [Ref<themeType>, () => void];

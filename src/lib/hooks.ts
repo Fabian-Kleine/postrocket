@@ -1,5 +1,5 @@
-import { ref, onMounted, onUnmounted } from "vue";
-import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType } from "../types";
+import { ref, onMounted, onUnmounted, watch } from "vue";
+import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType, useThemeType } from "../types";
 
 // useStorage hook for sessionStorage and localStorage access
 const getItem = (key: string, storage: Storage) => {
@@ -71,4 +71,43 @@ export const useOnClickOutside: useOnClickOutsideType = (ref, callback = () => {
     onUnmounted(() => {
         document.removeEventListener('mousedown', handleClickOutside);
     });
+}
+
+export const useTheme: useThemeType = () => {
+    const body = document.querySelector('body');
+    const [isDarkMode, setIsDarkMode] = useStorage("isDarkMode", "local");
+
+    const theme = ref();
+
+    const toggleTheme = () => {
+        if (!body) return;
+        setIsDarkMode(!isDarkMode.value);
+        theme.value = isDarkMode.value ? 'dark' : 'light';
+        if (isDarkMode.value) {
+            body.className = "dark";
+        } else {
+            body.className = "light";
+        }
+    };
+
+    onMounted(() => {
+        theme.value = isDarkMode.value ? 'dark' : 'light';
+        if (isDarkMode.value && body) {
+            body.className = "dark";
+        } else if (body) {
+            body.className = "light";
+        }
+    });
+
+    watch(isDarkMode, (newValue) => {
+        if (body) {
+            theme.value = isDarkMode.value ? 'dark' : 'light';
+            body.className = newValue ? "dark" : "light";
+        }
+    });
+
+    return [
+        theme,
+        toggleTheme,
+    ];
 }
