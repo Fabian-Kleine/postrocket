@@ -36,4 +36,7 @@ export type useOnClickOutsideType = (ref: Ref, callback: () => void) => void;
 
 export type themeType = "dark" | "light";
 
-export type useThemeType = () => [Ref<themeType>, () => void];
+export type useThemeType = {
+    theme: Ref<string | themeType>;
+    toggleTheme: () => void;
+}
