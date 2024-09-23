@@ -31,13 +31,20 @@ export const useStorage = (key: string, type: storageType = 'session'): useStora
     const setItem = (newValue: any) => {
         value.value = newValue;
         storage.setItem(key, JSON.stringify(newValue));
+        window.dispatchEvent(new StorageEvent('storage', { key }));
     }
 
-    window.addEventListener('storage', (event) => {
+    const storageHandler = (event: StorageEvent) => {
         if (event.key === key) {
             value.value = getItem(key, storage);
         }
-    })
+    };
+
+    window.addEventListener('storage', storageHandler);
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('storage', storageHandler);
+    });
 
     return [
         value,
