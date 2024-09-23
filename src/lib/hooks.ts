@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
 import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType, useThemeType } from "../types";
 
 // useStorage hook for sessionStorage and localStorage access
