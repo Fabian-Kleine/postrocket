@@ -11,7 +11,7 @@ const { activeBodyType, content } = defineProps<Props>();
 </script>
 
 <template>
-    <div class="px-4 py-2 border border-default-200 dark:border-default-700 rounded-md">
+    <div v-if="activeBodyType == 'XML' || activeBodyType == 'JSON'"  class="px-4 py-2 border border-default-200 dark:border-default-700 rounded-md">
         <Textarea v-if="activeBodyType == 'XML'" :language="'xml'" v-model="content.XML"></Textarea>
         <Textarea v-if="activeBodyType == 'JSON'" :language="'json'" v-model="content.JSON"></Textarea>
     </div>
