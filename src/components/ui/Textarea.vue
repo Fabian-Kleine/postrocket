@@ -8,7 +8,8 @@ import { computed, defineComponent, watch, shallowRef } from 'vue';
 import { Codemirror } from 'vue-codemirror';
 import { jsonLanguage } from '@codemirror/lang-json';
 import { xmlLanguage } from '@codemirror/lang-xml';
-import { materialDark } from '@fsegurai/codemirror-theme-material-dark';
+import { useTheme } from '../../lib/hooks';
+import { dracula, tomorrow } from "thememirror";
 
 interface Props {
     language: "json" | "xml";
@@ -25,10 +26,11 @@ export default defineComponent({
         }
     },
     setup(props: Props) {
+        const { theme } = useTheme();
         const extensions = computed(() => {
             return [
                 props.language === 'json' ? jsonLanguage : xmlLanguage,
-                materialDark,
+                theme.value === 'dark' ? dracula : tomorrow,
             ];
         });
 
@@ -39,12 +41,10 @@ export default defineComponent({
             view.value = payload.view;
         };
 
-        console.log(props.language);
-
         watch(() => props.language, () => {
             if (view.value) {
                 view.value.dispatch({
-                    effects: view.value.state.reconfigure(extensions.value),
+                    effects: view.value.state.facet.update(extensions.value),
                 });
             };
         });
