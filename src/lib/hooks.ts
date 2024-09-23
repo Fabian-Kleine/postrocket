@@ -27,10 +27,17 @@ export const useStorage = (key: string, type: storageType = 'session'): useStora
             throw new Error('Invalid storage type');
     }
     const value = ref(getItem(key, storage));
+
     const setItem = (newValue: any) => {
         value.value = newValue;
         storage.setItem(key, JSON.stringify(newValue));
     }
+
+    window.addEventListener('storage', (event) => {
+        if (event.key === key) {
+            value.value = getItem(key, storage);
+        }
+    })
 
     return [
         value,
