@@ -1,9 +1,58 @@
-<script setup lang="ts">
-import { cn } from '../../lib/utils';
-</script>
-
 <template>
-    <textarea rows="10"
-        :class="cn('block w-full overflow-visible mt-4 resize-none bg-background dark:bg-foreground border border-default-200 dark:border-default-700 rounded-md outline-none p-2')">
-    </textarea>
+    <Codemirror :style="{ height: '400px' }" :autofocus="true" :indent-with-tab="true" :tab-size="2"
+        :extensions="extensions" @ready="handleReady" />
 </template>
+
+<script lang="ts">
+import { computed, defineComponent, watch, shallowRef } from 'vue';
+import { Codemirror } from 'vue-codemirror';
+import { jsonLanguage } from '@codemirror/lang-json';
+import { xmlLanguage } from '@codemirror/lang-xml';
+import { materialDark } from '@fsegurai/codemirror-theme-material-dark';
+
+interface Props {
+    language: "json" | "xml";
+}
+
+export default defineComponent({
+    components: {
+        Codemirror
+    },
+    props: {
+        language: {
+            type: String,
+            required: true
+        }
+    },
+    setup(props: Props) {
+        const extensions = computed(() => {
+            return [
+                props.language === 'json' ? jsonLanguage : xmlLanguage,
+                materialDark,
+            ];
+        });
+
+        // Codemirror EditorView instance ref
+        const view = shallowRef();
+
+        const handleReady = (payload) => {
+            view.value = payload.view;
+        };
+
+        console.log(props.language);
+
+        watch(() => props.language, () => {
+            if (view.value) {
+                view.value.dispatch({
+                    effects: view.value.state.reconfigure(extensions.value),
+                });
+            };
+        });
+
+        return {
+            extensions,
+            handleReady
+        }
+    },
+});
+</script>
