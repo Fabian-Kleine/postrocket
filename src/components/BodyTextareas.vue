@@ -8,20 +8,9 @@ interface Props {
 }
 
 const { activeBodyType, content } = defineProps<Props>();
-
-function updateBodyContent(e: Event) {
-    const target = <HTMLTextAreaElement>e.target;
-
-    if (activeBodyType == "JSON") {
-        content.JSON = target.value;
-    }
-    if (activeBodyType == "XML") {
-        content.XML = target.value;
-    }
-}
 </script>
 
 <template>
-<Textarea v-if="activeBodyType == 'XML'" @input="updateBodyContent" :value="content && activeBodyType == 'XML' ? content.XML : ''"></Textarea>
-<Textarea v-if="activeBodyType == 'JSON'" @input="updateBodyContent" :value="content && activeBodyType == 'JSON' ? content.JSON : ''"></Textarea>
+<Textarea v-if="activeBodyType == 'XML'" :language="'xml'"  v-model="content.XML"></Textarea>
+<Textarea v-if="activeBodyType == 'JSON'" :language="'json'" v-model="content.JSON"></Textarea>
 </template>
