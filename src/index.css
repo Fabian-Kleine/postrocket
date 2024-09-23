@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* change dark mode background of Textarea */
+.ͼ3k, .ͼ3k .cm-gutters {
+    background-color: #11181C;
+}
