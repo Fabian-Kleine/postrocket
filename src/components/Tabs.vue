@@ -44,6 +44,7 @@ function addTab() {
     tabs.value.push({
         method: 'GET',
         url: '',
+        params: [{ active: null, key: '', value: '' }],
         body: {
             type: 'none',
             content: {
@@ -104,7 +105,10 @@ onMounted(() => {
             <MainInput :tabs="tabs" :active-tab="activeTab" />
             <Button variant="primary">Senden</Button>
         </div>
-        <h2 class="my-4 font-bold text-lg">Body</h2>
+        <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
+        <DynamicTable
+        :form-data="tabs[activeTab].params" />
+        <h2 class="mb-4 mt-8 font-bold text-lg">Body</h2>
         <Label for="none-radio">
             <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary" name="body-format"
                 id="none-radio" />
@@ -137,8 +141,7 @@ onMounted(() => {
         </Label>
         <BodyTextareas :active-body-type="activeBodyType" :content="tabs[activeTab].body.content" />
         <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
-            :form-data="tabs[activeTab].body.content.xWWWFormData" :active-body-type="activeBodyType" />
-        <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData"
-            :active-body-type="activeBodyType" />
+            :form-data="tabs[activeTab].body.content.xWWWFormData" />
+        <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData" />
     </div>
 </template>
