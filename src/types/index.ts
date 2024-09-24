@@ -40,3 +40,7 @@ export type useThemeType = {
     theme: Ref<string | themeType>;
     toggleTheme: () => void;
 }
+
+export type SpecificMethodsType = "get" | "post" | "put" | "patch" | "delete" | "head" | "options";
+
+export type methodsType = SpecificMethodsType | string & {};
