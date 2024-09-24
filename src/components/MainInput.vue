@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
-import { Tab } from '../types';
+import { FormDataType, Tab } from '../types';
 import { cn, methodColors, buildUrlParams } from '../lib/utils';
 import { useOnClickOutside } from '../lib/hooks';
 
@@ -30,10 +30,41 @@ function handleMethodInput(e: Event) {
     selectOpen.value = false;
 }
 
-function handleUrlInput(e :Event) {
+function handleUrlInput(e: Event) {
     const target = (<HTMLInputElement>e.target);
 
-    tabs[activeTab].url = target.value;
+    const urlSplit = target.value.split('?');
+
+    if (urlSplit.length <= 1) {
+        tabs[activeTab].url = target.value;
+        
+        // deselect all params
+        tabs[activeTab].params.forEach(param => {
+            if (param.active != null) {
+                param.active = false;
+            }
+        });
+
+        return;
+    }
+
+    const urlString = urlSplit[0];
+    const paramsString = urlSplit[1];
+
+    let params: Array<FormDataType> = [];
+    paramsString.split('&').forEach(param => {
+        const splitParam = param.split("=");
+        const key = decodeURI(splitParam[0] || "");
+        const value = decodeURI(splitParam[1] || "");
+
+        params.push({ active: true, key, value });
+    });
+
+    tabs[activeTab].params.filter(param => param.active).forEach((_, index) => {
+        tabs[activeTab].params[index] = params[index];
+    });
+
+    tabs[activeTab].url = urlString;
 }
 </script>
 
@@ -41,8 +72,7 @@ function handleUrlInput(e :Event) {
     <div :class="cn('relative flex border border-default-200 dark:border-default-700 p-2 rounded-md flex-grow')">
         <input @focus="selectOpen = true" @click.stop @input="handleMethodInput"
             :class="cn('bg-background dark:bg-foreground font-bold w-24 outline-none focus:ring ring-offset-8 rounded-s-sm ring-primary ring-offset-background dark:ring-offset-foreground', methodColors(tabs[activeTab].method))"
-            :value="tabs[activeTab].method"
-            ref="methodInputRef" />
+            :value="tabs[activeTab].method" ref="methodInputRef" />
         <div v-if="selectOpen" @click.stop ref="selectRef"
             :class="cn('absolute top-12 left-0 min-w-32 p-2 bg-default-100 dark:bg-default-800 rounded-md shadow-lg z-30')">
             <div @click="tabs[activeTab].method = 'GET'; selectOpen = false;"
@@ -64,7 +94,7 @@ function handleUrlInput(e :Event) {
                 :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('head'), tabs[activeTab].method == 'HEAD' ? 'bg-default-200 dark:bg-default-700' : '')">
                 HEAD</div>
             <div @click="tabs[activeTab].method = 'OPTIONS'; selectOpen = false;"
-                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('options'), tabs[activeTab].method == 'OPTIONS' ? 'bg-default-200 dark:bg-default-700' : '' )">
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('options'), tabs[activeTab].method == 'OPTIONS' ? 'bg-default-200 dark:bg-default-700' : '')">
                 OPTIONS</div>
             <div
                 :class="cn('py-2 mx-2 px-2 mt-3 text-xs text-default-400 dark:text-default border-t border-default-300 dark:border-default')">
@@ -72,6 +102,7 @@ function handleUrlInput(e :Event) {
         </div>
         <div :class="cn('w-[1px] mx-4 h-full bg-default-200 dark:bg-default-700')"></div>
         <input type="text" :value="tabs[activeTab].url + buildUrlParams(tabs[activeTab].params)"
-            :class="cn('bg-background dark:bg-foreground flex-grow w-full h-full outline-none focus:ring ring-offset-8 rounded-e-sm ring-primary ring-offset-background dark:ring-offset-foreground')" @input="handleUrlInput"/>
+            :class="cn('bg-background dark:bg-foreground flex-grow w-full h-full outline-none focus:ring ring-offset-8 rounded-e-sm ring-primary ring-offset-background dark:ring-offset-foreground')"
+            @input="handleUrlInput" />
     </div>
 </template>
