@@ -8,7 +8,7 @@ import DynamicTable from './ui/DynamicTable.vue';
 import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
-import { cn, methodColors } from '../lib/utils';
+import { cn, methodColors, buildUrlParams } from '../lib/utils';
 import { useStorage } from '../lib/hooks';
 
 const tabs: Tabs = ref([]);
@@ -76,15 +76,15 @@ onMounted(() => {
 <template>
     <div :class="cn('flex justify-left items-center border-b border-default-200 dark:border-default-700')">
         <div :class="cn('flex justify-center items-center relative -bottom-[1px] group z-10', activeTab == index ? 'bg-background dark:bg-foreground' : '')"
-            v-for="(tab, index) in tabs" :title="tab.url || 'Unbenannter Request'" v-if="tabs.length > 0">
+            v-for="(tab, index) in tabs" :title="(tab.url + buildUrlParams(tab.params)) || 'Unbenannter Request'" v-if="tabs.length > 0">
             <div @click="openTab(index)"
                 :class="cn('flex justify-left items-center gap-2 w-56 px-3 py-4 text-sm cursor-pointer border-default-200 dark:border-default-700', activeTab == index ? 'border-l border-r' : '')">
                 <div v-if="activeTab == index" class="absolute top-0 left-0 w-full bg-primary h-1"></div>
                 <span :class="['font-bold', methodColors(tab.method)]">{{
                     tab.method }}</span>
                 <span
-                    :class="['text-ellipsis', 'overflow-hidden', 'text-foreground', 'dark:text-default', activeTab != index ? 'italic' : '']">{{
-                        tab.url || 'Unbenannter Request' }}</span>
+                    :class="['text-ellipsis', 'overflow-hidden', 'text-foreground', 'dark:text-default', 'text-nowrap', activeTab != index ? 'italic' : '']">{{
+                        (tab.url + buildUrlParams(tab.params)) || 'Unbenannter Request' }}</span>
             </div>
             <button @click="closeTab(index)"
                 :class="cn('opacity-0 transition-all absolute right-1 p-1 group-hover:opacity-100 bg-background dark:bg-foreground hover:bg-default-200 dark:hover:bg-default-700')">
@@ -101,7 +101,7 @@ onMounted(() => {
             <div
                 :class="cn('text-primary-400 uppercase font-bold p-1 text-sm border border-default-200 dark:border-default-700 rounded-md')">
                 http</div>
-            <h2 class="my-4 cursor-default">{{ tabs[activeTab].url || "Unbenannter Request" }}</h2>
+            <h2 class="my-4 cursor-default">{{ (tabs[activeTab].url + buildUrlParams(tabs[activeTab].params)) || "Unbenannter Request" }}</h2>
         </div>
         <div class="flex gap-2 w-full">
             <MainInput :tabs="tabs" :active-tab="activeTab" />
