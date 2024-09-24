@@ -59,7 +59,9 @@ function addTab() {
     activeBodyType.value = 'none';
 }
 
-watch(tabs, () => {setTabsStorage(tabs.value)}, { deep: true });
+watch(tabs, () => {
+    setTabsStorage(tabs.value);
+}, { deep: true });
 
 onMounted(() => {
     if ("tabs" in localStorage) {
@@ -106,8 +108,7 @@ onMounted(() => {
             <Button variant="primary">Senden</Button>
         </div>
         <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
-        <DynamicTable
-        :form-data="tabs[activeTab].params" />
+        <DynamicTable :form-data="tabs[activeTab].params" />
         <h2 class="mb-4 mt-8 font-bold text-lg">Body</h2>
         <Label for="none-radio">
             <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary" name="body-format"
