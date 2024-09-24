@@ -1,6 +1,6 @@
 import { Ref } from "vue";
 
-export type bodyTypeType = "none" | "form-data" | "x-www-form-urlencoded" | "JSON" | "XML";
+export type bodyTypeType = "none" | "form-data" | "x-www-form-urlencoded" | "JSON" | "XML" | "text";
 
 export type FormDataType = {
     active: boolean | null,

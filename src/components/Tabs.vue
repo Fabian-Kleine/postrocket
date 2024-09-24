@@ -130,6 +130,11 @@ onMounted(() => {
                 id="XML-radio" />
             XML
         </Label>
+        <Label for="text-radio">
+            <Radio :checked="activeBodyType == 'text'" @input="setBodyType('text')" variant="primary" name="body-format"
+                id="text-radio" />
+            Text
+        </Label>
         <BodyTextareas :active-body-type="activeBodyType" :content="tabs[activeTab].body.content" />
         <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
             :form-data="tabs[activeTab].body.content.xWWWFormData" :active-body-type="activeBodyType" />
