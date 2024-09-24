@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { bodyTypeType, FormDataType } from '../../types';
+import { FormDataType } from '../../types';
 import { TrashIcon } from '@heroicons/vue/24/outline';
 import { cn } from '../../lib/utils';
 
 interface Props {
     formData: Array<FormDataType>;
-    activeBodyType: bodyTypeType;
 }
 
 const { formData } = defineProps<Props>();
