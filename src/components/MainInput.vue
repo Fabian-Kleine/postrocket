@@ -35,13 +35,28 @@ function handleMethodInput(e: Event) {
             :class="cn('bg-background dark:bg-foreground font-bold w-24 outline-none focus:ring ring-offset-8 rounded-s-sm ring-primary ring-offset-background dark:ring-offset-foreground', methodColors(tabs[activeTab].method))"
             :value="tabs[activeTab].method" />
         <div v-if="selectOpen" @click.stop ref="selectRef"
-            :class="cn('absolute top-12 left-0 min-w-32 p-2 bg-default-100 dark:bg-default-800 rounded-md shadow-lg')">
+            :class="cn('absolute top-12 left-0 min-w-32 p-2 bg-default-100 dark:bg-default-800 rounded-md shadow-lg z-30')">
             <div @click="tabs[activeTab].method = 'GET'; selectOpen = false;"
                 :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('get'))">
                 GET</div>
             <div @click="tabs[activeTab].method = 'POST'; selectOpen = false;"
-            :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('post'))">
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('post'))">
                 POST</div>
+            <div @click="tabs[activeTab].method = 'PUT'; selectOpen = false;"
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('put'))">
+                PUT</div>
+            <div @click="tabs[activeTab].method = 'PATCH'; selectOpen = false;"
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('patch'))">
+                PATCH</div>
+            <div @click="tabs[activeTab].method = 'DELETE'; selectOpen = false;"
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('delete'))">
+                DELETE</div>
+            <div @click="tabs[activeTab].method = 'HEAD'; selectOpen = false;"
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('head'))">
+                HEAD</div>
+            <div @click="tabs[activeTab].method = 'OPTIONS'; selectOpen = false;"
+                :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('options'))">
+                OPTIONS</div>
         </div>
         <div :class="cn('w-[1px] mx-4 h-full bg-default-200 dark:bg-default-700')"></div>
         <input type="text" v-model="tabs[activeTab].url"
