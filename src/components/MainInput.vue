@@ -61,7 +61,7 @@ function handleMethodInput(e: Event) {
                 :class="cn('font-bold hover:bg-default-200 dark:hover:bg-default-700 py-1 px-4 cursor-pointer rounded-md', methodColors('options'))">
                 OPTIONS</div>
             <div
-                :class="cn('py-2 mx-2 px-2 mt-3 text-xs cursor-pointer text-default-300 dark:text-default border-t border-default-300 dark:border-default')">
+                :class="cn('py-2 mx-2 px-2 mt-3 text-xs text-default-400 dark:text-default border-t border-default-300 dark:border-default')">
                 Gib eine eigene Methode ein</div>
         </div>
         <div :class="cn('w-[1px] mx-4 h-full bg-default-200 dark:bg-default-700')"></div>
