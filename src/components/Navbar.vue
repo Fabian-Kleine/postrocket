@@ -12,7 +12,7 @@ const {theme, toggleTheme} = useTheme();
             <img src="/icon.png" class="w-8" alt="Logo" />
             <h1 class="text-lg text-primary font-bold">Postrocket</h1>
         </a>
-        <button title="Toggle Theme" @click="toggleTheme" :class="cn('hover:bg-default-300/50 dark:hover:bg-default-600 rounded-md p-2 transition-colors')">
+        <button title="Toggle Theme" @click="toggleTheme" :class="cn('hover:bg-default-300/50 dark:hover:bg-default-600 rounded-md p-2 transition-colors mr-3')">
             <SunIcon v-if="theme == 'dark'" class="size-6 text-foreground dark:text-background" />
             <MoonIcon v-if="theme == 'light'" class="size-6 text-foreground dark:text-background" />
         </button>
