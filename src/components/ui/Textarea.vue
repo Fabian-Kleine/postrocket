@@ -12,7 +12,7 @@ import { useTheme } from '../../lib/hooks';
 import { dracula, tomorrow } from "thememirror";
 
 interface Props {
-    language: "json" | "xml";
+    language: "json" | "xml" | "text";
 }
 
 export default defineComponent({
@@ -29,9 +29,11 @@ export default defineComponent({
         const { theme } = useTheme();
         const extensions = computed(() => {
             return [
-                props.language === 'json' ? jsonLanguage : xmlLanguage,
+                props.language === 'json' ? jsonLanguage : props.language === 'xml' ? xmlLanguage : null,
                 theme.value === 'dark' ? dracula : tomorrow,
-            ];
+            ].filter(function (el) {
+                return el != null;
+            });
         });
 
         // Codemirror EditorView instance ref
