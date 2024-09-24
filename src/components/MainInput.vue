@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, Ref } from 'vue';
 import { Tab } from '../types';
-import { cn, methodColors } from '../lib/utils';
+import { cn, methodColors, buildUrlParams } from '../lib/utils';
 import { useOnClickOutside } from '../lib/hooks';
 
 interface Props {
@@ -28,6 +28,12 @@ function handleMethodInput(e: Event) {
 
     tabs[activeTab].method = target.value.toUpperCase();
     selectOpen.value = false;
+}
+
+function handleUrlInput(e :Event) {
+    const target = (<HTMLInputElement>e.target);
+
+    tabs[activeTab].url = target.value;
 }
 </script>
 
@@ -65,7 +71,7 @@ function handleMethodInput(e: Event) {
                 Gib eine eigene Methode ein</div>
         </div>
         <div :class="cn('w-[1px] mx-4 h-full bg-default-200 dark:bg-default-700')"></div>
-        <input type="text" v-model="tabs[activeTab].url"
-            :class="cn('bg-background dark:bg-foreground flex-grow w-full h-full outline-none focus:ring ring-offset-8 rounded-e-sm ring-primary ring-offset-background dark:ring-offset-foreground')" />
+        <input type="text" :value="tabs[activeTab].url + buildUrlParams(tabs[activeTab].params)"
+            :class="cn('bg-background dark:bg-foreground flex-grow w-full h-full outline-none focus:ring ring-offset-8 rounded-e-sm ring-primary ring-offset-background dark:ring-offset-foreground')" @input="handleUrlInput"/>
     </div>
 </template>
