@@ -87,6 +87,7 @@ export const useOnClickOutside: useOnClickOutsideType = (ref, callback = () => {
     });
 }
 
+// useTheme returns the current theme: 'dark' or 'light' when it changes as theme and the theme can be toggle using the toggleTheme function
 export const useTheme = (): useThemeType => {
     const body = document.querySelector('body');
     const [isDarkMode, setIsDarkMode] = useStorage("isDarkMode", "local");
