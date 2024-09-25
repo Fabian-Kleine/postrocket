@@ -97,6 +97,13 @@ onMounted(() => {
             <PlusIcon class="text-foreground dark:text-default size-5" />
         </div>
     </div>
+    <div class="flex justify-center items-center flex-col gap-10 w-screen mt-10" v-if="tabs.length == 0">
+        <img src="/icon.png" alt="Logo" width="200">
+        <div class="flex items-center flex-col gap-4">
+            <h2 class="text-lg text-default-400">Erstelle einen neuen Request:</h2>
+            <Button variant="primary" @click="addTab">Request erstellen</Button>
+        </div>
+    </div>
     <div class="max-w-4xl mt-12 mx-4" v-if="tabs.length > 0">
         <div class="flex justify-start items-center gap-2">
             <div
