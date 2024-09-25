@@ -1,5 +1,5 @@
 import { ref, onMounted, onUnmounted, watch, onBeforeUnmount } from "vue";
-import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType, useThemeType } from "../types";
+import { storageType, useNetworkStatusType, useOnClickOutsideType, useStorageType, useThemeType, useWindowResizeType } from "../types";
 
 // useStorage hook for sessionStorage and localStorage access
 const getItem = (key: string, storage: Storage) => {
@@ -116,4 +116,27 @@ export const useTheme = (): useThemeType => {
         theme,
         toggleTheme,
     };
+}
+
+// useWindowResize returns the width and height of the window when it is resized
+export const useWindowResize: useWindowResizeType = () => {
+    const width = ref<number>(window.innerWidth);
+    const height = ref<number>(window.innerHeight);
+    const handleResize = () => {
+        width.value = window.innerWidth;
+        height.value = window.innerHeight;
+    }
+
+    onMounted(() => {
+        window.addEventListener('resize', handleResize);
+    });
+
+    onUnmounted(() => {
+        window.removeEventListener('resize', handleResize);
+    });
+
+    return {
+        width,
+        height
+    }
 }
