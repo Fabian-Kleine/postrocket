@@ -12,6 +12,7 @@
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@codemirror/lang-xml": "^6.1.0",
+    "@codemirror/lint": "^6.8.2",
     "@codemirror/state": "^6.4.1",
     "@heroicons/vue": "^2.1.5",
     "clsx": "^2.1.1",
