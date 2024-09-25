@@ -6,8 +6,9 @@
 <script lang="ts">
 import { computed, defineComponent, watch, shallowRef } from 'vue';
 import { Codemirror } from 'vue-codemirror';
-import { jsonLanguage } from '@codemirror/lang-json';
-import { xmlLanguage } from '@codemirror/lang-xml';
+import { linter } from "@codemirror/lint";
+import { jsonLanguage, jsonParseLinter } from '@codemirror/lang-json';
+import { xmlLanguage, autoCloseTags } from '@codemirror/lang-xml';
 import { useTheme } from '../../lib/hooks';
 import { dracula, tomorrow } from "thememirror";
 
@@ -31,6 +32,8 @@ export default defineComponent({
             return [
                 props.language === 'json' ? jsonLanguage : props.language === 'xml' ? xmlLanguage : null,
                 theme.value === 'dark' ? dracula : tomorrow,
+                props.language === 'json' ? linter(jsonParseLinter()) : null,
+                autoCloseTags
             ].filter(function (el) {
                 return el != null;
             });
