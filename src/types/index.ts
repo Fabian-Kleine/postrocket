@@ -46,3 +46,5 @@ export type useThemeType = {
 export type SpecificMethodsType = "get" | "post" | "put" | "patch" | "delete" | "head" | "options";
 
 export type methodsType = SpecificMethodsType | string & {};
+
+export type useWindowResizeType = () => { width: Ref<number>, height: Ref<number> };
