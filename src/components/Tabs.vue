@@ -50,6 +50,7 @@ function addTab() {
             content: {
                 JSON: "{}",
                 XML: undefined,
+                Text: undefined,
                 formData: [{ active: null, key: '', value: '' }],
                 xWWWFormData: [{ active: null, key: '', value: '' }],
             }
