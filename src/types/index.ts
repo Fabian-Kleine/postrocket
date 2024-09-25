@@ -18,7 +18,8 @@ export type Tab = {
             formData: Array<FormDataType>,
             xWWWFormData: Array<FormDataType>,
             JSON: string | undefined,
-            XML: string | undefined
+            XML: string | undefined,
+            Text: string | undefined
         },
     }
 }
