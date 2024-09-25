@@ -75,7 +75,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div :class="cn('flex justify-left items-center border-b border-default-200 dark:border-default-700')">
+    <div :class="cn('flex justify-left items-center flex-wrap border-b border-default-200 dark:border-default-700 pr-2')">
         <div :class="cn('flex justify-center items-center relative -bottom-[1px] group z-10', activeTab == index ? 'bg-background dark:bg-foreground' : '')"
             v-for="(tab, index) in tabs" :title="(tab.url + buildUrlParams(tab.params)) || 'Unbenannter Request'" v-if="tabs.length > 0">
             <div @click="openTab(index)"
