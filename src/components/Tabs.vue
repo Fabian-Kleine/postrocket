@@ -101,18 +101,19 @@ async function sendRequest() {
 
         if (activeBodyType.value == "form-data") {
             data = buildFormData(tabs.value[activeTab.value].body.content.formData);
-        }
+        } else
         if (activeBodyType.value == "x-www-form-urlencoded") {
             data = buildFormData(tabs.value[activeTab.value].body.content.xWWWFormData);
-        }
+        } else
         if (activeBodyType.value == "JSON") {
-            data = tabs.value[activeTab.value].body.content.JSON;
-        }
+            //@ts-ignore
+            data = JSON.parse(tabs.value[activeTab.value].body.content.JSON);
+        } else
         if (activeBodyType.value == "XML") {
             data = tabs.value[activeTab.value].body.content.XML;
-        }
+        } else
         if (activeBodyType.value == "text") {
-            data = { text: tabs.value[activeTab.value].body.content.Text };
+            data = new String(tabs.value[activeTab.value].body.content.Text);
         }
 
         const response = await axios({
