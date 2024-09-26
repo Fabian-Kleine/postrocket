@@ -8,8 +8,9 @@ import DynamicTable from './ui/DynamicTable.vue';
 import BodyTextareas from './BodyTextareas.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
-import { cn, methodColors, buildUrlParams } from '../lib/utils';
+import { cn, methodColors, buildUrlParams, buildFormData } from '../lib/utils';
 import { useStorage } from '../lib/hooks';
+import axios from 'axios';
 
 const tabs: Tabs = ref([]);
 const [tabsStorage, setTabsStorage] = useStorage("tabs", "local");
@@ -72,12 +73,57 @@ onMounted(() => {
     }
 });
 
+async function sendRequest() {
+    const method = tabs.value[activeTab.value].method;
+    let url = tabs.value[activeTab.value].url;
+    try {
+        new URL(url);
+    } catch {
+        url = "http://" + tabs.value[activeTab.value].url;
+    }
+    const searchParams = new URLSearchParams();
+    const params = tabs.value[activeTab.value].params;
+
+    params.filter(param => param.active).forEach(param => {
+        searchParams.append(param.key, param.value);
+    });
+
+    let data;
+
+    if (activeBodyType.value == "form-data") {
+        data = buildFormData(tabs.value[activeTab.value].body.content.formData);
+    }
+    if (activeBodyType.value == "x-www-form-urlencoded") {
+        data = buildFormData(tabs.value[activeTab.value].body.content.xWWWFormData);
+    }
+    if (activeBodyType.value == "JSON") {
+        data = tabs.value[activeTab.value].body.content.JSON;
+    }
+    if (activeBodyType.value == "XML") {
+        data = tabs.value[activeTab.value].body.content.XML;
+    }
+    if (activeBodyType.value == "text") {
+        data = { text: tabs.value[activeTab.value].body.content.Text };
+    }
+
+    const response = await axios({
+        method,
+        url,
+        params: searchParams,
+        data
+    });
+
+    console.log(response);
+}
+
 </script>
 
 <template>
-    <div :class="cn('flex justify-left items-center flex-wrap border-b border-default-200 dark:border-default-700 pr-2')">
+    <div
+        :class="cn('flex justify-left items-center flex-wrap border-b border-default-200 dark:border-default-700 pr-2')">
         <div :class="cn('flex justify-center items-center relative -bottom-[1px] group z-10', activeTab == index ? 'bg-background dark:bg-foreground' : '')"
-            v-for="(tab, index) in tabs" :title="(tab.url + buildUrlParams(tab.params)) || 'Unbenannter Request'" v-if="tabs.length > 0">
+            v-for="(tab, index) in tabs" :title="(tab.url + buildUrlParams(tab.params)) || 'Unbenannter Request'"
+            v-if="tabs.length > 0">
             <div @click="openTab(index)"
                 :class="cn('flex justify-left items-center gap-2 w-56 px-3 py-4 text-sm cursor-pointer border-default-200 dark:border-default-700', activeTab == index ? 'border-l border-r' : '')">
                 <div v-if="activeTab == index" class="absolute top-0 left-0 w-full bg-primary h-1"></div>
@@ -109,11 +155,12 @@ onMounted(() => {
             <div
                 :class="cn('text-primary-400 uppercase font-bold p-1 text-sm border border-default-200 dark:border-default-700 rounded-md')">
                 http</div>
-            <h2 class="my-4 cursor-default">{{ (tabs[activeTab].url + buildUrlParams(tabs[activeTab].params)) || "Unbenannter Request" }}</h2>
+            <h2 class="my-4 cursor-default">{{ (tabs[activeTab].url + buildUrlParams(tabs[activeTab].params)) ||
+                "Unbenannter Request" }}</h2>
         </div>
         <div class="flex gap-2 w-full">
             <MainInput :tabs="tabs" :active-tab="activeTab" />
-            <Button variant="primary">Senden</Button>
+            <Button variant="primary" @click="sendRequest">Senden</Button>
         </div>
         <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
         <DynamicTable :form-data="tabs[activeTab].params" />
