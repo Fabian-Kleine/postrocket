@@ -12,6 +12,9 @@ import { Tabs, bodyTypeType } from "../types";
 import { cn, methodColors, buildUrlParams, buildFormData } from '../lib/utils';
 import { useStorage } from '../lib/hooks';
 import axios from 'axios';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 const tabs: Tabs = ref([]);
 const [tabsStorage, setTabsStorage] = useStorage("tabs", "local");
@@ -75,47 +78,66 @@ onBeforeMount(() => {
 });
 
 async function sendRequest() {
-    const method = tabs.value[activeTab.value].method;
-    let url = tabs.value[activeTab.value].url;
     try {
-        new URL(url);
-    } catch {
-        url = "http://" + tabs.value[activeTab.value].url;
-    }
-    const searchParams = new URLSearchParams();
-    const params = tabs.value[activeTab.value].params;
+        const method = tabs.value[activeTab.value].method;
+        let url = tabs.value[activeTab.value].url;
+        if (!url) {
+            toast.warning("URL is leer");
+            return;
+        }
+        try {
+            new URL(url);
+        } catch {
+            url = "http://" + tabs.value[activeTab.value].url;
+        }
+        const searchParams = new URLSearchParams();
+        const params = tabs.value[activeTab.value].params;
 
-    params.filter(param => param.active).forEach(param => {
-        searchParams.append(param.key, param.value);
-    });
+        params.filter(param => param.active).forEach(param => {
+            searchParams.append(param.key, param.value);
+        });
 
-    let data;
+        let data;
 
-    if (activeBodyType.value == "form-data") {
-        data = buildFormData(tabs.value[activeTab.value].body.content.formData);
-    }
-    if (activeBodyType.value == "x-www-form-urlencoded") {
-        data = buildFormData(tabs.value[activeTab.value].body.content.xWWWFormData);
-    }
-    if (activeBodyType.value == "JSON") {
-        data = tabs.value[activeTab.value].body.content.JSON;
-    }
-    if (activeBodyType.value == "XML") {
-        data = tabs.value[activeTab.value].body.content.XML;
-    }
-    if (activeBodyType.value == "text") {
-        data = { text: tabs.value[activeTab.value].body.content.Text };
-    }
+        if (activeBodyType.value == "form-data") {
+            data = buildFormData(tabs.value[activeTab.value].body.content.formData);
+        }
+        if (activeBodyType.value == "x-www-form-urlencoded") {
+            data = buildFormData(tabs.value[activeTab.value].body.content.xWWWFormData);
+        }
+        if (activeBodyType.value == "JSON") {
+            data = tabs.value[activeTab.value].body.content.JSON;
+        }
+        if (activeBodyType.value == "XML") {
+            data = tabs.value[activeTab.value].body.content.XML;
+        }
+        if (activeBodyType.value == "text") {
+            data = { text: tabs.value[activeTab.value].body.content.Text };
+        }
 
-    const response = await axios({
-        method,
-        url,
-        params: searchParams,
-        data
-    });
+        const response = await axios({
+            method,
+            url,
+            params: searchParams,
+            timeout: 3000,
+            data
+        });
 
-    console.log(response);
-    tabs.value[activeTab.value].output = JSON.stringify(response.data, null, "\t");
+        console.log(response);
+        tabs.value[activeTab.value].output = JSON.stringify(response.data, null, "\t");
+        toast.success("Daten empfangen!")
+    } catch (error) {
+        console.error(error);
+        if (axios.isAxiosError(error)) {
+            if (error.message?.includes('timeout')) {
+                toast.error("Request timeout!");
+            } else if (error.status != 200) {
+                toast.error(`${error.response?.status}: ${error.response?.statusText}`);
+            }
+            return;
+        }
+        toast.error("Beim senden ist ein Fehler aufgetreten!\nEin detaillierter Fehler Bericht wird in der Browser Konsole ausgegeben");
+    }
 }
 
 </script>
