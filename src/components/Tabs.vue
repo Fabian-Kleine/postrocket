@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { XMarkIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import { onMounted, Ref, ref, watch } from 'vue';
+import { onBeforeMount, Ref, ref, watch } from 'vue';
 import Button from './ui/Button.vue';
 import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
@@ -65,9 +65,8 @@ watch(tabs, () => {
     setTabsStorage(tabs.value);
 }, { deep: true });
 
-onMounted(() => {
+onBeforeMount(() => {
     if ("tabs" in localStorage) {
-        //@ts-ignore
         tabs.value = tabsStorage.value;
         activeBodyType.value = tabs.value[activeTab.value]?.body?.type || "none";
     }
@@ -162,42 +161,49 @@ async function sendRequest() {
             <MainInput :tabs="tabs" :active-tab="activeTab" />
             <Button variant="primary" @click="sendRequest">Senden</Button>
         </div>
-        <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
-        <DynamicTable :form-data="tabs[activeTab].params" />
-        <h2 class="mb-4 mt-8 font-bold text-lg">Body</h2>
-        <Label for="none-radio">
-            <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary" name="body-format"
-                id="none-radio" />
-            none
-        </Label>
-        <Label for="form-data-radio">
-            <Radio :checked="activeBodyType == 'form-data'" @input="setBodyType('form-data')" variant="primary"
-                name="body-format" id="form-data-radio" />
-            form-data
-        </Label>
-        <Label for="x-www-form-urlencoded-radio">
-            <Radio :checked="activeBodyType == 'x-www-form-urlencoded'" @input="setBodyType('x-www-form-urlencoded')"
-                variant="primary" name="body-format" id="x-www-form-urlencoded-radio" />
-            x-www-form-urlencoded
-        </Label>
-        <Label for="JSON-radio">
-            <Radio :checked="activeBodyType == 'JSON'" @input="setBodyType('JSON')" variant="primary" name="body-format"
-                id="JSON-radio" />
-            JSON
-        </Label>
-        <Label for="XML-radio">
-            <Radio :checked="activeBodyType == 'XML'" @input="setBodyType('XML')" variant="primary" name="body-format"
-                id="XML-radio" />
-            XML
-        </Label>
-        <Label for="text-radio">
-            <Radio :checked="activeBodyType == 'text'" @input="setBodyType('text')" variant="primary" name="body-format"
-                id="text-radio" />
-            Text
-        </Label>
-        <BodyTextareas :active-body-type="activeBodyType" :content="tabs[activeTab].body.content" />
-        <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
-            :form-data="tabs[activeTab].body.content.xWWWFormData" />
-        <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData" />
+    </div>
+    <div class="flex justify-around gap-10 mx-4">
+        <div class="flex-grow">
+            <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
+            <DynamicTable :form-data="tabs[activeTab].params" />
+        </div>
+        <div class="flex-grow">
+            <h2 class="mb-4 mt-8 font-bold text-lg">Body</h2>
+            <Label for="none-radio">
+                <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary"
+                    name="body-format" id="none-radio" />
+                none
+            </Label>
+            <Label for="form-data-radio">
+                <Radio :checked="activeBodyType == 'form-data'" @input="setBodyType('form-data')" variant="primary"
+                    name="body-format" id="form-data-radio" />
+                form-data
+            </Label>
+            <Label for="x-www-form-urlencoded-radio">
+                <Radio :checked="activeBodyType == 'x-www-form-urlencoded'"
+                    @input="setBodyType('x-www-form-urlencoded')" variant="primary" name="body-format"
+                    id="x-www-form-urlencoded-radio" />
+                x-www-form-urlencoded
+            </Label>
+            <Label for="JSON-radio">
+                <Radio :checked="activeBodyType == 'JSON'" @input="setBodyType('JSON')" variant="primary"
+                    name="body-format" id="JSON-radio" />
+                JSON
+            </Label>
+            <Label for="XML-radio">
+                <Radio :checked="activeBodyType == 'XML'" @input="setBodyType('XML')" variant="primary"
+                    name="body-format" id="XML-radio" />
+                XML
+            </Label>
+            <Label for="text-radio">
+                <Radio :checked="activeBodyType == 'text'" @input="setBodyType('text')" variant="primary"
+                    name="body-format" id="text-radio" />
+                Text
+            </Label>
+            <BodyTextareas :active-body-type="activeBodyType" :content="tabs[activeTab].body.content" />
+            <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
+                :form-data="tabs[activeTab].body.content.xWWWFormData" />
+            <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData" />
+        </div>
     </div>
 </template>
