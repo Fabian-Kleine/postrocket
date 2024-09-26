@@ -11,7 +11,8 @@ export type FormDataType = {
 export type Tab = {
     url: string,
     method: string,
-    params: Array<FormDataType>;
+    params: Array<FormDataType>,
+    output: string,
     body: {
         type: bodyTypeType,
         content: {

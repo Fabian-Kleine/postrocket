@@ -6,6 +6,7 @@ import Radio from './ui/Radio.vue';
 import Label from './ui/Label.vue';
 import DynamicTable from './ui/DynamicTable.vue';
 import BodyTextareas from './BodyTextareas.vue';
+import Textarea from './ui/Textarea.vue';
 import MainInput from './MainInput.vue';
 import { Tabs, bodyTypeType } from "../types";
 import { cn, methodColors, buildUrlParams, buildFormData } from '../lib/utils';
@@ -46,6 +47,7 @@ function addTab() {
         method: 'GET',
         url: '',
         params: [{ active: null, key: '', value: '' }],
+        output: "",
         body: {
             type: 'none',
             content: {
@@ -113,6 +115,7 @@ async function sendRequest() {
     });
 
     console.log(response);
+    tabs.value[activeTab.value].output = JSON.stringify(response.data, null, "\t");
 }
 
 </script>
@@ -204,6 +207,14 @@ async function sendRequest() {
             <DynamicTable v-if="activeBodyType == 'x-www-form-urlencoded'"
                 :form-data="tabs[activeTab].body.content.xWWWFormData" />
             <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData" />
+        </div>
+    </div>
+    <h2 class="mx-4 mb-4 mt-8 font-bold text-lg">Output</h2>
+    <div class="px-4 py-2 mx-4 mt-2 border border-default-200 dark:border-default-700 rounded-md">
+        <Textarea v-if="tabs[activeTab].output" language='json' v-model="tabs[activeTab].output" disabled></Textarea>
+        <div class="flex items-center flex-col gap-4 py-4" v-if="!tabs[activeTab].output">
+            <h2 class="text-lg text-default-400">Request wurde noch nicht gesendet! Keine Output Daten verfügbar.</h2>
+            <Button variant="primary" @click="sendRequest">Request jetzt senden</Button>
         </div>
     </div>
 </template>
