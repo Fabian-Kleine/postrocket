@@ -162,7 +162,7 @@ async function sendRequest() {
             <Button variant="primary" @click="sendRequest">Senden</Button>
         </div>
     </div>
-    <div class="flex justify-around gap-10 mx-4">
+    <div class="flex justify-around flex-col lg:flex-row gap-10 mx-4">
         <div class="flex-grow">
             <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
             <DynamicTable :form-data="tabs[activeTab].params" />
