@@ -77,6 +77,16 @@ export default {
         'danger-700': '#841f29',
         'danger-800': '#58151b',
         'danger-900': '#2c0a0d',
+      },
+      keyframes: {
+        spinner: {
+          '0%': { transform: 'rotate(0deg) scale(1)', opacity: '1' },
+          '50%': { transform: 'rotate(180deg) scale(1.5)', opacity: '0.5' },
+          '100%': { transform: 'rotate(360deg) scale(1)', opacity: '1' }
+        }
+      },
+      animation: {
+        spinner: 'spinner 1.25s infinite linear'
       }
     },
   },

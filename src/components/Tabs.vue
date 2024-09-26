@@ -21,7 +21,9 @@ const [tabsStorage, setTabsStorage] = useStorage("tabs", "local");
 
 const [activeTab, setActiveTab] = useStorage("activeTab", "local");
 
-const activeBodyType: Ref<bodyTypeType, bodyTypeType> = ref("none");
+const activeBodyType: Ref<bodyTypeType> = ref("none");
+
+const isLoading: Ref<boolean> = ref(false);
 
 const setBodyType = (bodyType: bodyTypeType) => {
     activeBodyType.value = bodyType;
@@ -78,6 +80,7 @@ onBeforeMount(() => {
 });
 
 async function sendRequest() {
+    isLoading.value = true;
     try {
         const method = tabs.value[activeTab.value].method;
         let url = tabs.value[activeTab.value].url;
@@ -132,12 +135,15 @@ async function sendRequest() {
         if (axios.isAxiosError(error)) {
             if (error.message?.includes('timeout')) {
                 toast.error("Request timeout!");
-            } else if (error.status != 200) {
+                return;
+            } else if (error.response && error.response?.status != 200) {
                 toast.error(`${error.response?.status}: ${error.response?.statusText}`);
+                return;
             }
-            return;
         }
         toast.error("Beim senden ist ein Fehler aufgetreten!\nEin detaillierter Fehler Bericht wird in der Browser Konsole ausgegeben");
+    } finally {
+        isLoading.value = false;
     }
 }
 
@@ -185,7 +191,7 @@ async function sendRequest() {
         </div>
         <div class="flex gap-2 w-full">
             <MainInput :tabs="tabs" :active-tab="activeTab" />
-            <Button variant="primary" @click="sendRequest">Senden</Button>
+            <Button :loading="isLoading" variant="primary" @click="sendRequest">Senden</Button>
         </div>
     </div>
     <div class="flex justify-around flex-col lg:flex-row gap-10 mx-4">
@@ -196,33 +202,33 @@ async function sendRequest() {
         <div class="flex-grow">
             <h2 class="mb-4 mt-8 font-bold text-lg">Body</h2>
             <Label for="none-radio">
-                <Radio :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'none'" @input="setBodyType('none')" variant="primary"
                     name="body-format" id="none-radio" />
                 none
             </Label>
             <Label for="form-data-radio">
-                <Radio :checked="activeBodyType == 'form-data'" @input="setBodyType('form-data')" variant="primary"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'form-data'" @input="setBodyType('form-data')" variant="primary"
                     name="body-format" id="form-data-radio" />
                 form-data
             </Label>
             <Label for="x-www-form-urlencoded-radio">
-                <Radio :checked="activeBodyType == 'x-www-form-urlencoded'"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'x-www-form-urlencoded'"
                     @input="setBodyType('x-www-form-urlencoded')" variant="primary" name="body-format"
                     id="x-www-form-urlencoded-radio" />
                 x-www-form-urlencoded
             </Label>
             <Label for="JSON-radio">
-                <Radio :checked="activeBodyType == 'JSON'" @input="setBodyType('JSON')" variant="primary"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'JSON'" @input="setBodyType('JSON')" variant="primary"
                     name="body-format" id="JSON-radio" />
                 JSON
             </Label>
             <Label for="XML-radio">
-                <Radio :checked="activeBodyType == 'XML'" @input="setBodyType('XML')" variant="primary"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'XML'" @input="setBodyType('XML')" variant="primary"
                     name="body-format" id="XML-radio" />
                 XML
             </Label>
             <Label for="text-radio">
-                <Radio :checked="activeBodyType == 'text'" @input="setBodyType('text')" variant="primary"
+                <Radio :disabled="isLoading" :checked="activeBodyType == 'text'" @input="setBodyType('text')" variant="primary"
                     name="body-format" id="text-radio" />
                 Text
             </Label>
@@ -237,7 +243,7 @@ async function sendRequest() {
         <Textarea v-if="tabs[activeTab].output" language='json' v-model="tabs[activeTab].output" disabled></Textarea>
         <div class="flex items-center flex-col gap-4 py-4" v-if="!tabs[activeTab].output">
             <h2 class="text-lg text-default-400">Request wurde noch nicht gesendet! Keine Output Daten verfügbar.</h2>
-            <Button variant="primary" @click="sendRequest">Request jetzt senden</Button>
+            <Button :loading="isLoading" variant="primary" @click="sendRequest">Request jetzt senden</Button>
         </div>
     </div>
 </template>
