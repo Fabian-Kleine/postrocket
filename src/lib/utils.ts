@@ -18,13 +18,13 @@ export function methodColors(method: methodsType) {
 
 export function buildUrlParams(params: Array<FormDataType>): string {
     try {
-        const url = new URL("http://example.com"); // just a placeholder URL (it has no use)
+        const searchParams = new URLSearchParams();
 
         params.filter(param => param.active).forEach(param => {
-            url.searchParams.append(param.key, param.value);
+            searchParams.append(param.key, param.value);
         });
 
-        return url.search;
+        return searchParams.toString() ? "?" + searchParams.toString() : "";
     } catch (error) {
         return "";
     }
@@ -32,4 +32,14 @@ export function buildUrlParams(params: Array<FormDataType>): string {
 
 export function isTouchEnabled(): boolean {
     return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+}
+
+export function buildFormData(data: Array<FormDataType>): FormData {
+    const formData = new FormData();
+
+    data.filter(d => d.active).forEach(d => {
+        formData.append(d.key, d.value);
+    });
+
+    return formData;
 }
