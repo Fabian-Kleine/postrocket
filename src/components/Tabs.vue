@@ -244,7 +244,7 @@ async function sendRequest() {
     </div>
     <h2 class="mx-4 mb-4 mt-8 font-bold text-lg">Output</h2>
     <div class="px-4 py-2 mx-4 mt-2 border border-default-200 dark:border-default-700 rounded-md">
-        <Textarea v-if="tabs[activeTab].output" language='json' v-model="tabs[activeTab].output" disabled></Textarea>
+        <Textarea :style="{ height: 'max' }" v-if="tabs[activeTab].output" language='json' v-model="tabs[activeTab].output" disabled></Textarea>
         <div class="flex items-center flex-col gap-4 py-4" v-if="!tabs[activeTab].output">
             <h2 class="text-lg text-default-400">Request wurde noch nicht gesendet! Keine Output Daten verfügbar.</h2>
             <Button :loading="isLoading" variant="primary" @click="sendRequest">Request jetzt senden</Button>
