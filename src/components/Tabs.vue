@@ -103,22 +103,28 @@ async function sendRequest() {
         });
 
         let data;
+        let headers;
 
         if (activeBodyType.value == "form-data") {
             data = buildFormData(tabs.value[activeTab.value].body.content.formData);
+            headers = {'Content-Type': 'multipart/form-data'};
         } else
         if (activeBodyType.value == "x-www-form-urlencoded") {
             data = buildFormData(tabs.value[activeTab.value].body.content.xWWWFormData);
+            headers = {'Content-Type': 'application/x-www-form-urlencoded'};
         } else
         if (activeBodyType.value == "JSON") {
             //@ts-ignore
             data = JSON.parse(tabs.value[activeTab.value].body.content.JSON);
+            headers = {'Content-Type': 'application/json'};
         } else
         if (activeBodyType.value == "XML") {
             data = tabs.value[activeTab.value].body.content.XML;
+            headers = {'Content-Type': 'application/xml'};
         } else
         if (activeBodyType.value == "text") {
             data = new String(tabs.value[activeTab.value].body.content.Text);
+            headers = {'Content-Type': 'text/plain'};
         }
 
         const response = await axios({
@@ -126,7 +132,8 @@ async function sendRequest() {
             url,
             params: searchParams,
             timeout: 3000,
-            data
+            data,
+            headers
         });
 
         console.log(response);
