@@ -81,6 +81,7 @@ onBeforeMount(() => {
 
 async function sendRequest() {
     isLoading.value = true;
+    tabs.value[activeTab.value].output = "Request wird gesendet";
     try {
         const method = tabs.value[activeTab.value].method;
         let url = tabs.value[activeTab.value].url;
@@ -135,13 +136,16 @@ async function sendRequest() {
         if (axios.isAxiosError(error)) {
             if (error.message?.includes('timeout')) {
                 toast.error("Request timeout!");
+                tabs.value[activeTab.value].output = "Request timeout!";
                 return;
             } else if (error.response && error.response?.status != 200) {
                 toast.error(`${error.response?.status}: ${error.response?.statusText}`);
+                tabs.value[activeTab.value].output = `${error.response?.status}: ${error.response?.statusText}`;
                 return;
             }
         }
-        toast.error("Beim senden ist ein Fehler aufgetreten!\nEin detaillierter Fehler Bericht wird in der Browser Konsole ausgegeben");
+        toast.error("Beim senden ist ein Fehler aufgetreten!\nEin detaillierter Fehler Bericht wird in der Browser Konsole und im Output ausgegeben");
+        tabs.value[activeTab.value].output = JSON.stringify(error, null, "\t");
     } finally {
         isLoading.value = false;
     }
