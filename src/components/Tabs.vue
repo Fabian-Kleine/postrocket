@@ -86,7 +86,8 @@ async function sendRequest() {
         const method = tabs.value[activeTab.value].method;
         let url = tabs.value[activeTab.value].url;
         if (!url) {
-            toast.warning("URL is leer");
+            toast.warning("URL is leer!");
+            tabs.value[activeTab.value].output = "URL is leer!";
             return;
         }
         try {
