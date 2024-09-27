@@ -112,6 +112,10 @@ export const useTheme = (): useThemeType => {
         applyTheme();
     });
 
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches && isDarkMode.value == null) {
+        isDarkMode.value = true;
+    }
+
     return {
         theme,
         toggleTheme,
