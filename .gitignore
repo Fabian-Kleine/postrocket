@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 tsconfig.app.tsbuildinfo
+
+###> frosh/devenv-meta ###
+.devenv*
+devenv.local.nix
+.direnv*
+###< frosh/devenv-meta ###
