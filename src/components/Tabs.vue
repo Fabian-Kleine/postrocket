@@ -206,7 +206,7 @@ async function sendRequest() {
             <Button :loading="isLoading" variant="primary" @click="sendRequest">Senden</Button>
         </div>
     </div>
-    <div class="flex justify-around flex-col lg:flex-row gap-10 mx-4">
+    <div class="flex justify-around flex-col lg:flex-row gap-10 mx-4" v-if="tabs[activeTab]">
         <div class="flex-grow">
             <h2 class="mb-4 mt-8 font-bold text-lg">Params</h2>
             <DynamicTable :form-data="tabs[activeTab].params" />
@@ -250,8 +250,8 @@ async function sendRequest() {
             <DynamicTable v-if="activeBodyType == 'form-data'" :form-data="tabs[activeTab].body.content.formData" />
         </div>
     </div>
-    <h2 class="mx-4 mb-4 mt-8 font-bold text-lg">Output</h2>
-    <div class="px-4 py-2 mx-4 mt-2 border border-default-200 dark:border-default-700 rounded-md">
+    <h2 class="mx-4 mb-4 mt-8 font-bold text-lg" v-if="tabs[activeTab]">Output</h2>
+    <div class="px-4 py-2 mx-4 mt-2 border border-default-200 dark:border-default-700 rounded-md" v-if="tabs[activeTab]">
         <Textarea :style="{ height: 'max' }" v-if="tabs[activeTab].output" language='json' v-model="tabs[activeTab].output" disabled></Textarea>
         <div class="flex items-center flex-col gap-4 py-4" v-if="!tabs[activeTab].output">
             <h2 class="text-lg text-default-400">Request wurde noch nicht gesendet! Keine Output Daten verfügbar.</h2>
