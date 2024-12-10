@@ -10,7 +10,7 @@ mkdir postrocket
 
 cd postrocket
 
-git clone https://gitlab.rhiem-intermedia.de/fabian.kleine/postman-clone.git
+git clone git@github.com:Fabian-Kleine/postrocket.git
 
 cd postman-clone
 ```
